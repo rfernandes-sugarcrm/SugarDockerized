@@ -78,11 +78,10 @@ jobs:
                     prefix=${{ matrix.prefix }},onlatest=true
 
           - name: Build and push
-            if: ${{ github.repository == 'sugarcrm-developers/SugarDockerized' }}
             uses: docker/build-push-action@v4
             with:
                 context: ${{ matrix.dockercontext }}
-                push: true
+                push: ${{ github.repository == 'sugarcrm-developers/SugarDockerized' && 'true' || 'false' }}
                 platforms: 'linux/amd64,linux/arm64'
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
