@@ -1,4 +1,4 @@
-# Sugar Dockerized  [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar12.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar12.yml) [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar13.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar13.yml) [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar14.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar14.yml)
+# Sugar Dockerized [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar25.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar25.yml)  [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar14.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar14.yml) [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar13.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar13.yml) [![Build Status](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar12.yml/badge.svg)](https://github.com/sugarcrm-developers/SugarDockerized/actions/workflows/sugar12.yml)
 
 This repository will help you deploy a Docker based **development only** full stack for Sugar, meeting all the platform requirements for a different set of platform combinations.
 
@@ -20,13 +20,17 @@ If you find this software useful, please consider supporting the work that went 
 
 ## Stacks available
 There are few stacks available, with in itself multiple platform combinations. You can read more about the specific stacks on the links below:
-* [Sugar 14](stacks/sugar14/README.md) - This stack is valid for version 13 for local developement also of Sugar Cloud only versions
-* [Sugar 13](stacks/sugar13/README.md) - This stack is valid for version 13 for local developement also of Sugar Cloud only versions
-* [Sugar 12](stacks/sugar12/README.md) - This stack is valid for version 12 for local developement also of Sugar Cloud only versions
-* [Sugar 11](stacks/sugar11/README.md) - This stack is valid for version 11 for local developement also of Sugar Cloud only versions
+* [Sugar 25](stacks/sugar25/README.md) - This stack is compatible with version 25 for local development
+* [Sugar 14](stacks/sugar14/README.md) - This stack is compatible with version 14 for local development
+* [Sugar 13](stacks/sugar13/README.md) - This stack is compatible with version 13 for local development
+* [Sugar 12](stacks/sugar12/README.md) - This stack is compatible with version 12 for local development
+* [Sugar 11](stacks/sugar11/README.md) - This stack is compatible with version 11 for local development
 
 You will find additional stacks within the [stack directory of the project](stacks).
-For most stacks, there are both the pre-built version (eg on Sugar 14: `./stacks/sugar14/php83.yml`) and a locally built version (eg on Sugar 14: `./stacks/sugar14/php83-local-build.yml`). The locally built version will be built run-time, and therefore those stacks will let you specify additional changes you might require to the docker images provided. Local builds will take much longer to deploy than pre-built ones.
+
+For most stacks, there are both the **pre-built** version (eg on Sugar 25: `./stacks/sugar25/php83.yml`) and a **locally built** version (eg on Sugar 25: `./stacks/sugar25/php83-local-build.yml`). 
+
+The locally built version will be built run-time, and therefore those stacks will let you specify additional changes you might require to the docker images provided. Local builds will take much longer to deploy than pre-built ones.
 
 ### Types of stacks
 There are mainly three types of stack:
@@ -110,7 +114,7 @@ Apache web servers have enabled:
 ### PHP additional information
 Apache web servers have PHP with enabled:
 * Zend OPcache - Configured for Sugar with the assumption the files will be located within the correct path
-* XHProf and Tideways profilers
+* XHProf and Tideways* profilers (Tideways has been **retired** and will no longer be available on **PHP >= 8.4** stacks)
 * `Xdebug` is installed but it is not enabled by default (due to its performance impact). For PHP 5.6 images and all cron images if there is the need to enable it, you would have to uncomment the configuration option on the PHP Dockerfile of choice, and leverage the stack configuration with local build. For other case see [`xdebug.sh`](#xdebugsh).
     * Remember, `Xdebug` will connect from the Container to your Host not the other way around. In summary, we instructed Xdebug to start with a request and try to send the debug events to the host with the IP `host.docker.internal` on port `9003`. 
     * If you use an IDE such as PHPStorm, you can setup DBGp Proxy under the menus Preference -> Language & Framework -> PHP -> Debug -> DBGp Proxy. Example settings are available in the screenshot below:
@@ -236,10 +240,10 @@ All directories and files within "data" are now owned by uid:gid 1000:1000
 It sets the correct ownership of the data directories
 
 #### stack.sh
-```./utilities/stack.sh 13 down```
+```./utilities/stack.sh 25 down```
 ```
-./utilities/stack.sh 13 down
-stacks/sugar13/php82.yml down
+./utilities/stack.sh 25 down
+stacks/sugar25/php83.yml down
 Stopping sugar-cron          ... done
 Stopping sugar-web1          ... done
 Stopping sugar-redis         ... done
@@ -254,8 +258,10 @@ Removing sugar-elasticsearch ... done
 Removing network sugar13_default
 No stopped containers
 ```
-It helps to take the default stack for the sugar version passed as a parameter, up or down. It expects two parameters: version number (eg: 12, 13 etc) and up/down.
+It helps to take the default stack for the sugar version passed as a parameter, up or down. It expects two parameters: version number (eg: 14, 25 etc) and up/down.
 Have a look at the configuration file `./utilities/stacks.conf`, to know all the available stack combinations for the script. For some of the main stacks is available the "local" version of the stack, that allows local modification of settings and local docker image building.
+
+**Note:** Going forward, you will also have a version with the latest and greatest supported platforms that can be accessed by using *-latest-* for those stacks. For example, **pre-built** version (eg on Sugar 25: ```./utilities/stack.sh 25-latest up```) and a **locally built** version (eg on Sugar 25: ```./utilities/stack.sh 25-latest-local down```). 
 
 #### runcli.sh
 ```./utilities/runcli.sh "php ./bin/sugarcrm password:weak"```
@@ -516,7 +522,7 @@ If needed, sudo is available as well without the need of entering a password. Ju
 
 ### XHProf / Tideways profiling data collection
 
-Both XHProf extension and Tideways extensions are configured in most stacks.
+XHProf extension is configured in most stacks as well as Tideways, however Tideways has been **retired** and will no longer be supported on **PHP >= 8.4** stacks.
 
 To enable profiling:
 * If you choose to use Tideways, add [this custom code](https://github.com/esimonetti/SugarTidewaysProfiling) to your Sugar installation and repair the system.

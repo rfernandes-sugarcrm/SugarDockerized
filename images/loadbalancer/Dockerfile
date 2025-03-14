@@ -1,5 +1,5 @@
 FROM debian:8.8
-MAINTAINER enrico.simonetti@gmail.com
+LABEL maintainer="enrico.simonetti@gmail.com"
 
 RUN apt-get update && apt-get install -y \
     unzip \
